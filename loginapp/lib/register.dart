@@ -1,23 +1,22 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:loginapp/home.dart';
-import 'package:loginapp/register.dart';
-import 'package:loginapp/user.dart';
-import 'package:http/http.dart' as http;
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+import 'package:http/http.dart' as http;
+import 'package:loginapp/user.dart';
+
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
+class _RegisterState extends State<Register> {
   final _formkey = GlobalKey<FormState>();
-  bool loginError = false;
+
   User user = User("", "");
-  String url = "http://10.0.2.2:8080/loginapp/login";
+  String url = "http://10.0.2.2:8080/loginapp/register";
 
   Future<void> save() async {
     try {
@@ -28,14 +27,9 @@ class _LoginState extends State<Login> {
             'password': user.password,
           }));
 
-      if (res.statusCode == 200) {
-        // ignore: use_build_context_synchronously
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home(user: user)));
-      } else {
-        setState(() {
-          loginError = true;
-        });
+      if (res.body != null) {
+        Future.delayed(Duration(milliseconds: 1000));
+        Navigator.pop(context);
       }
     } catch (error) {
       print('Error: $error');
@@ -55,7 +49,7 @@ class _LoginState extends State<Login> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Login',
+                    'Register',
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   Column(
@@ -71,7 +65,6 @@ class _LoginState extends State<Login> {
                           }
                         },
                         decoration: const InputDecoration(
-                          errorStyle: TextStyle(color: Colors.red),
                           prefixIcon: Icon(Icons.email),
                           hintText: 'Email',
                           labelText: 'Email',
@@ -99,7 +92,6 @@ class _LoginState extends State<Login> {
                       const SizedBox(
                         height: 30,
                       ),
-                      Text(loginError ? 'Login error' : ''),
                       SizedBox(
                         width: double.infinity,
                         child: OutlinedButton(
@@ -112,27 +104,22 @@ class _LoginState extends State<Login> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 20)),
                             onPressed: () {
-                              if (_formkey.currentState!.validate()) {
-                                save();
-                              }
+                              save();
                             },
                             child: Text(
-                              'Login',
+                              'Register',
                               style: Theme.of(context).textTheme.headlineSmall,
                             )),
                       ),
                       const SizedBox(
                         height: 30,
                       ),
-                      const Text('if you dont have account'),
+                      const Text('if you already have account'),
                       TextButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Register()));
+                            Navigator.pop(context);
                           },
-                          child: const Text('Register'))
+                          child: const Text('Signup'))
                     ],
                   )
                 ],

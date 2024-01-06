@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loginapp/card.dart';
 import 'package:loginapp/login.dart';
 
 void main() {
@@ -10,8 +11,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: const Login(),
+    return const SafeArea(
+      child: MaterialApp(
+        home: Advertistment()
+      ),
     );
   }
 }
